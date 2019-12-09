@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/api/v1/profiles")
 public class ProfileController {
@@ -31,6 +33,12 @@ public class ProfileController {
     public ProfileDocument findById(@PathVariable String id) throws Exception {
 
         return service.findById(id);
+    }
+
+    @GetMapping("/search/{searchTerm}")
+    public ArrayList<ProfileDocument> findByQuery(@PathVariable String searchTerm) throws Exception {
+
+        return service.findByQuery(searchTerm);
     }
 
 }

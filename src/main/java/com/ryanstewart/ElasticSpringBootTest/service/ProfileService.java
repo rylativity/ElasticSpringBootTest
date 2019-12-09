@@ -7,11 +7,18 @@ import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 
@@ -38,9 +45,9 @@ public class ProfileService {
 
         IndexRequest indexRequest = new IndexRequest("profiles", "_doc", document.getId()).source(documentMapper);
 
-       IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
+        IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
 
-       return indexResponse.getResult().name();
+        return indexResponse.getResult().name();
     }
 
     public ProfileDocument findById(String id) throws Exception {
@@ -51,5 +58,32 @@ public class ProfileService {
         Map<String, Object> resultMap = getResponse.getSource();
 
         return objectMapper.convertValue(resultMap, ProfileDocument.class);
+    }
+
+    public ArrayList<ProfileDocument> findByQuery(String searchTerm) throws Exception {
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.termQuery("firstName", searchTerm));
+
+        SearchRequest searchRequest = new SearchRequest("profiles");
+        searchRequest.source(searchSourceBuilder);
+
+        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+        SearchHits hits = searchResponse.getHits();
+
+        SearchHit[] searchHits = hits.getHits();
+
+        ArrayList<ProfileDocument> searchReturn = new ArrayList<>();
+
+        for (SearchHit hit : searchHits) {
+
+            Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            ProfileDocument profileDocument = objectMapper.convertValue(sourceAsMap, ProfileDocument.class);
+            searchReturn.add(profileDocument);
+        }
+
+        return searchReturn;
+
     }
 }
