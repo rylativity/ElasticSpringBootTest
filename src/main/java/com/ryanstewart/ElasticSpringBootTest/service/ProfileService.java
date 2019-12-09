@@ -60,21 +60,24 @@ public class ProfileService {
         return objectMapper.convertValue(resultMap, ProfileDocument.class);
     }
 
-    public ArrayList<ProfileDocument> findByQuery(String searchTerm) throws Exception {
+    public ProfileDocument[] findByQuery(String searchTerm) throws Exception {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.termQuery("firstName", searchTerm));
 
         SearchRequest searchRequest = new SearchRequest("profiles");
         searchRequest.source(searchSourceBuilder);
+        searchRequest.types("_doc");
 
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
 
+        // Need to debug the following.  Look into the objects being returned from here
         SearchHits hits = searchResponse.getHits();
+        long totalHits = hits.getTotalHits();
 
         SearchHit[] searchHits = hits.getHits();
 
-        ArrayList<ProfileDocument> searchReturn = new ArrayList<>();
+        ProfileDocument[] searchReturn = new ProfileDocument[(int) totalHits];
 
         for (SearchHit hit : searchHits) {
 
