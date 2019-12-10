@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -60,24 +61,23 @@ public class ProfileService {
         return objectMapper.convertValue(resultMap, ProfileDocument.class);
     }
 
-    public ProfileDocument[] findByQuery(String searchTerm) throws Exception {
-
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.termQuery("firstName", searchTerm));
+    public List<ProfileDocument> findByQuery(String searchTerm, String fieldName) throws Exception {
 
         SearchRequest searchRequest = new SearchRequest("profiles");
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.queryStringQuery(fieldName + ":" + searchTerm));
+
         searchRequest.source(searchSourceBuilder);
         searchRequest.types("_doc");
 
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
 
-        // Need to debug the following.  Look into the objects being returned from here
         SearchHits hits = searchResponse.getHits();
         long totalHits = hits.getTotalHits();
 
         SearchHit[] searchHits = hits.getHits();
 
-        ProfileDocument[] searchReturn = new ProfileDocument[(int) totalHits];
+        List<ProfileDocument> searchReturn = new ArrayList<>();
 
         for (SearchHit hit : searchHits) {
 
