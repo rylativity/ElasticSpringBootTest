@@ -1,5 +1,5 @@
-/home/ryan/github/ElasticSpringBootTest/src/main/java/com/ryanstewart/ElasticSpringBootTest/controller/ProfileController.java
-/home/ryan/github/ElasticSpringBootTest/src/main/java/com/ryanstewart/ElasticSpringBootTest/ProfileDocument.java
-/home/ryan/github/ElasticSpringBootTest/src/main/java/com/ryanstewart/ElasticSpringBootTest/service/ProfileService.java
+/home/ryan/github/ElasticSpringBootTest/src/main/java/com/ryanstewart/ElasticSpringBootTest/service/SearchTermService.java
+/home/ryan/github/ElasticSpringBootTest/src/main/java/com/ryanstewart/ElasticSpringBootTest/controller/SearchTermController.java
+/home/ryan/github/ElasticSpringBootTest/src/main/java/com/ryanstewart/ElasticSpringBootTest/repository/SearchTermDocument.java
 /home/ryan/github/ElasticSpringBootTest/src/main/java/com/ryanstewart/ElasticSpringBootTest/Application.java
 /home/ryan/github/ElasticSpringBootTest/src/main/java/com/ryanstewart/ElasticSpringBootTest/config/ElasticsearchConfiguration.java
