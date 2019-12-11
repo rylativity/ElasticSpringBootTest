@@ -1,5 +1,0 @@
-com/ryanstewart/ElasticSpringBootTest/service/SearchTermService.class
-com/ryanstewart/ElasticSpringBootTest/Application.class
-com/ryanstewart/ElasticSpringBootTest/controller/SearchTermController.class
-com/ryanstewart/ElasticSpringBootTest/config/ElasticsearchConfiguration.class
-com/ryanstewart/ElasticSpringBootTest/repository/SearchTermDocument.class
